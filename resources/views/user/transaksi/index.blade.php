@@ -1,33 +1,46 @@
-@extends('layouts.master')
-@section('title','Data Transaksi')
+@extends('layouts.user')
+
 @section('content')
-<h1 class="h3 mb-4 text-gray-800">Data Transaksi</h1>
-<a href="{{ route('transaksi.create') }}" class="btn btn-primary mb-3">+ Tambah Transaksi</a>
-<div class="card shadow">
-  <div class="card-body">
-    <table class="table table-bordered">
-      <thead>
-        <tr><th>ID</th><th>Pelanggan</th><th>Layanan</th><th>Jumlah</th><th>Total Harga</th><th>Aksi</th></tr>
-      </thead>
-      <tbody>
-        @foreach($transaksis as $t)
-        <tr>
-          <td>{{ $t->id }}</td>
-          <td>{{ $t->pelanggan->nama }}</td>
-          <td>{{ $t->layanan->nama_layanan }}</td>
-          <td>{{ $t->jumlah }}</td>
-          <td>Rp {{ number_format($t->total_harga,0,',','.') }}</td>
-          <td>
-            <form action="{{ route('transaksi.destroy',$t->id) }}" method="POST" class="d-inline">
-              @csrf @method('DELETE')
-              <button class="btn btn-danger btn-sm" onclick="return confirm('Hapus data?')">Hapus</button>
-            </form>
-          </td>
-        </tr>
-        @endforeach
-      </tbody>
-    </table>
-    {{ $transaksis->links() }}
-  </div>
-</div>
+    <h1 class="h3 mb-4 text-gray-800">Riwayat Transaksi</h1>
+
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">Daftar Transaksi</h6>
+        </div>
+        <div class="card-body">
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Kode Transaksi</th>
+                        <th>Layanan</th>
+                        <th>Total</th>
+                        <th>Status</th>
+                        <th>Tanggal</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @forelse($transaksis as $transaksi)
+                        <tr>
+                            <td>{{ $transaksi->kode }}</td>
+                            <td>{{ $transaksi->layanan->nama ?? '-' }}</td>
+                            <td>Rp{{ number_format($transaksi->total, 0, ',', '.') }}</td>
+                            <td>
+                                <span class="badge 
+                                    @if($transaksi->status == 'pending') badge-warning
+                                    @elseif($transaksi->status == 'selesai') badge-success
+                                    @else badge-secondary @endif">
+                                    {{ ucfirst($transaksi->status) }}
+                                </span>
+                            </td>
+                            <td>{{ $transaksi->created_at->format('d-m-Y H:i') }}</td>
+                        </tr>
+                    @empty
+                        <tr>
+                            <td colspan="5" class="text-center">Belum ada transaksi.</td>
+                        </tr>
+                    @endforelse
+                </tbody>
+            </table>
+        </div>
+    </div>
 @endsection

@@ -200,15 +200,45 @@
             @if($errors->any())
             <div class="error">{{ $errors->first() }}</div>
             @endif
-            <form method="POST" action="{{ route('register.post') }}">
-                @csrf
-                <input type="text" name="name" placeholder="Nama Lengkap" value="{{ old('name') }}" required>
-                <input type="text" name="username" placeholder="Username" value="{{ old('username') }}" required>
-                <input type="email" name="email" placeholder="Email" value="{{ old('email') }}" required>
-                <input type="password" name="password" placeholder="Password" required>
-                <input type="password" name="password_confirmation" placeholder="Konfirmasi Password" required>
-                <button type="submit">Daftar</button>
-            </form>
+            <form action="{{ url('/register') }}" method="POST">
+                        @csrf
+
+                        <div class="mb-3">
+                            <label for="name" class="form-label">Nama Lengkap</label>
+                            <input type="text" name="name" class="form-control" required value="{{ old('name') }}">
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="username" class="form-label">Username</label>
+                            <input type="text" name="username" class="form-control" required value="{{ old('username') }}">
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="email" class="form-label">Alamat Email</label>
+                            <input type="email" name="email" class="form-control" required value="{{ old('email') }}">
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="password" class="form-label">Password</label>
+                            <input type="password" name="password" class="form-control" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="password_confirmation" class="form-label">Konfirmasi Password</label>
+                            <input type="password" name="password_confirmation" class="form-control" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="role" class="form-label">Daftar Sebagai</label>
+                            <select name="role" class="form-select" required>
+                                <option value="">-- Pilih Role --</option>
+                                <option value="admin">Admin</option>
+                                <option value="pelanggan">Pelanggan</option>
+                            </select>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary w-100">Daftar</button>
+                    </form>
             <br>
             <div class="login-link">
                 Sudah punya akun? <a href="{{ route('login') }}">Login</a>

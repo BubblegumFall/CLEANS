@@ -48,5 +48,10 @@ class User extends Authenticatable
     return redirect()->route('login')->with('success', 'Registrasi berhasil!');
 }
 
+public function transaksis()
+{
+    return $this->hasMany(\App\Models\Transaksi::class);
+}
+
 }
 

@@ -1,49 +1,41 @@
-@extends('layouts.master')
+@extends('layouts.user') {{-- sidebar khusus user --}}
 
-@section('title', 'Tambah Layanan')
+@section('title', 'Pesan Layanan')
 
 @section('content')
-    <h1 class="h3 mb-4 text-gray-800">Tambah Layanan</h1>
+<div class="container-fluid">
+    <h1 class="h3 mb-4 text-gray-800">Pesan Layanan</h1>
 
-    <div class="card shadow">
+    <!-- Card -->
+    <div class="card shadow mb-4">
         <div class="card-body">
-            <form action="{{ route('layanan.store') }}" method="POST">
+            <form action="{{ route('user.layanan.store') }}" method="POST">
                 @csrf
 
-                <div class="mb-3">
-                    <label for="nama_pelanggan" class="form-label">Nama Pelanggan</label>
-                    <select name="nama_pelanggan" id="nama_pelanggan" class="form-control" required>
-                        <option value="">-- Pilih Nama Pelanggan --</option>
-                        @foreach ($pelanggans as $pelanggan)
-                            <option value="{{ $pelanggan->nama }}" {{ old('nama_pelanggan') == $pelanggan->nama ? 'selected' : '' }}>
-                                {{ $pelanggan->nama }}
+                <!-- Pilih layanan -->
+                <div class="form-group">
+                    <label for="layanan_id">Pilih Layanan</label>
+                    <select name="layanan_id" id="layanan_id" class="form-control" required>
+                        <option value="">-- Pilih Layanan --</option>
+                        @foreach ($layanans as $layanan)
+                            <option value="{{ $layanan->id }}">
+                                {{ $layanan->nama_layanan }} - Rp {{ number_format($layanan->harga, 0, ',', '.') }}
                             </option>
                         @endforeach
                     </select>
                 </div>
 
-                <div class="mb-3">
-                    <label for="jenis_layanan" class="form-label">Jenis Layanan</label>
-                    <select name="jenis_layanan" id="jenis_layanan" class="form-control" required>
-                        <option value="">-- Pilih Jenis Layanan --</option>
-                        <option value="Setrika">Setrika</option>
-                        <option value="Laundry Kilat">Laundry Kilat</option>
-                    </select>
+                <!-- Tombol -->
+                <div class="mt-3">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-plus"></i> Buat Pesanan
+                    </button>
+                    <a href="{{ route('user.layanan.index') }}" class="btn btn-secondary">
+                        Kembali
+                    </a>
                 </div>
-
-                <div class="mb-3">
-    <label for="harga_per_kilo" class="form-label">Harga per Kilo (Rp.10.000)</label>
-    <input type="number" name="harga_per_kilo" id="harga_per_kilo" class="form-control" required>
-</div>
-
-                <div class="mb-3">
-                    <label for="estimasi_waktu" class="form-label">Estimasi Waktu (hari)</label>
-                    <input type="number" name="estimasi_waktu" id="estimasi_waktu" class="form-control" required>
-                </div>
-
-                <button type="submit" class="btn btn-primary">Simpan</button>
-                <a href="{{ route('layanan.index') }}" class="btn btn-secondary">Kembali</a>
             </form>
         </div>
     </div>
+</div>
 @endsection

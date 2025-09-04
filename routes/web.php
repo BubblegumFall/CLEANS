@@ -1,55 +1,74 @@
 <?php
 
+use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\PelangganController;
 use App\Http\Controllers\LayananController;
 use App\Http\Controllers\TransaksiController;
+use App\Http\Controllers\LaporanController;
 use App\Http\Controllers\User\UserLayananController;
 use App\Http\Controllers\User\UserTransaksiController;
-use App\Http\Controllers\LaporanController;
-use App\Http\Controllers\AuthController;
-use Illuminate\Support\Facades\Route;
 
-// Halaman awal
+/*
+|--------------------------------------------------------------------------
+| Halaman Awal & Auth
+|--------------------------------------------------------------------------
+*/
 Route::get('/', function () {
     return view('auth.login');
 });
 
-// Form login
-Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
-
-// Proses login
-Route::post('/login', [AuthController::class, 'login'])->name('login.post');
+// Login
+Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
+Route::post('/login', [LoginController::class, 'login'])->name('login.post');
 
 // Logout
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
-// REGISTER
-Route::get('/register', [AuthController::class, 'showRegisterForm'])->name('register');
-Route::post('/register', [AuthController::class, 'register'])->name('register.post');
+// Register
+Route::get('/register', [RegisterController::class, 'showRegistrationForm'])->name('register');
+Route::post('/register', [RegisterController::class, 'register']);
 
-Route::middleware(['auth','role:admin'])->group(function () {
-    
-    // Dashboard admin
-    Route::get('dashboard', function () {
-        return view('dashboard');
-    })->name('adminDashboard');
+/*
+|--------------------------------------------------------------------------
+| Admin Routes
+|--------------------------------------------------------------------------
+*/
+Route::middleware(['auth', 'role:admin'])
+    ->prefix('admin')
+    ->name('admin.')
+    ->group(function () {
 
-    // Resource
-    Route::resource('admin/pelanggan', PelangganController::class);
-    Route::resource('admin/layanan', LayananController::class);
-    Route::resource('admin/transaksi', TransaksiController::class);
-    Route::resource('admin/laporan', LaporanController::class);
+        // Dashboard Admin
+        Route::get('/dashboard', function () {
+            return view('admin.dashboard');
+        })->name('dashboard');
 
-});
+        // Resource Admin
+        Route::resource('pelanggan', PelangganController::class);
+        Route::resource('layanan', LayananController::class);
+        Route::resource('transaksi', TransaksiController::class);
+        Route::resource('laporan', LaporanController::class);
+    });
 
-Route::middleware(['auth','role:user'])->group(function () {
-    
-    // Dashboard admin
-    Route::get('user/dashboard', function () {
-        return view('user.dashboard');
-    })->name('userDashboard');
+/*
+|--------------------------------------------------------------------------
+| User/Pelanggan Routes
+|--------------------------------------------------------------------------
+*/
+Route::middleware(['auth', 'role:user'])
+    ->prefix('user')
+    ->name('user.')
+    ->group(function () {
 
-    
-    Route::resource('layanan', UserLayananController::class);
-    Route::resource('transaksi', UserTransaksiController::class);
-});
+        // Dashboard User
+        Route::get('/dashboard', function () {
+            return view('user.dashboard');
+        })->name('dashboard');
+
+        // Resource User
+        Route::resource('layanan', UserLayananController::class);
+        Route::resource('transaksi', UserTransaksiController::class);
+    });

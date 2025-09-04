@@ -1,59 +1,38 @@
-@extends('layouts.master')
+@extends('layouts.user')
 
-@section('title', 'Data Layanan')
+@section('title', 'Daftar Layanan')
 
 @section('content')
-    <h1 class="h3 mb-4 text-gray-800">Data Layanan</h1>
+<div class="container-fluid">
+    <h1 class="h3 mb-4 text-gray-800">Daftar Layanan</h1>
 
-    @if (session('success'))
-        <div class="alert alert-success">{{ session('success') }}</div>
-    @endif
+    <!-- Tombol tambah -->
+    <a href="{{ route('user.layanan.create') }}" class="btn btn-success mb-3">
+        <i class="fas fa-plus"></i> Pesan Layanan
+    </a>
 
-    <a href="{{ route('layanan.create') }}" class="btn btn-primary mb-3">+ Tambah Layanan</a>
-
-    <div class="card shadow">
+    <!-- Card -->
+    <div class="card shadow mb-4">
         <div class="card-body">
             <table class="table table-bordered">
-                <thead>
+                <thead class="thead">
                     <tr>
-                        <th>ID</th>
-                        <th>Nama Pelanggan</th>
-                        <th>Jenis Layanan</th>
-                        <th>Harga/Kg (Rp.10.000)</th>
-                        <th>Estimasi Waktu (hari)</th>
-                        <th>Aksi</th>
+                        <th>No</th>
+                        <th>Nama Layanan</th>
+                        <th>Harga</th>
                     </tr>
                 </thead>
                 <tbody>
-                    @forelse ($layanans as $layanan)
+                    @foreach ($layanans as $layanan)
                         <tr>
                             <td>{{ $loop->iteration }}</td>
-                            <td>{{ $layanan->nama_pelanggan }}</td>
-                            <td>{{ $layanan->jenis_layanan }}</td>
-                            <td>{{ number_format($layanan->harga_per_kilo, 0, ',', '.') }}</td>
-                            <td>{{ $layanan->estimasi_waktu }}</td>
-                            <td>
-                                <a href="{{ route('layanan.edit', $layanan->id) }}" class="btn btn-sm btn-warning">Edit</a>
-
-                                <form action="{{ route('layanan.destroy', $layanan->id) }}" method="POST" style="display: inline-block;"
-                                    onsubmit="return confirm('Yakin ingin menghapus data ini?');">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="btn btn-sm btn-danger">Hapus</button>
-                                </form>
-                            </td>
+                            <td>{{ $layanan->nama_layanan }}</td>
+                            <td>Rp {{ number_format($layanan->harga, 0, ',', '.') }}</td>
                         </tr>
-                    @empty
-                        <tr>
-                            <td colspan="6" class="text-center">Belum ada data layanan.</td>
-                        </tr>
-                    @endforelse
+                    @endforeach
                 </tbody>
             </table>
-
-            <div class="mt-3">
-                {{ $layanans->links() }}
-            </div>
         </div>
     </div>
+</div>
 @endsection

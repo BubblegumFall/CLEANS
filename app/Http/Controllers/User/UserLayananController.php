@@ -2,79 +2,41 @@
 
 namespace App\Http\Controllers\User;
 
-use App\Models\Layanan;
-use App\Models\Pelanggan;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Models\Layanan;
 
 class UserLayananController extends Controller
-
 {
+    // Tampilkan daftar layanan yang bisa dipesan user
     public function index()
     {
-        $layanans = Layanan::paginate(10);
+        $layanans = Layanan::all();
         return view('user.layanan.index', compact('layanans'));
     }
 
+    // Form tambah pesanan layanan
     public function create()
     {
-        $pelanggans = Pelanggan::all();
-        return view('user.layanan.create', compact('pelanggans'));
+        $layanans = Layanan::all();
+        return view('user.layanan.create', compact('layanans'));
     }
 
+    // Simpan pesanan layanan
     public function store(Request $request)
-{
-    $request->validate([
-        'nama_pelanggan' => 'required|string',
-        'jenis_layanan' => 'required|string',
-        'harga_per_kilo' => 'required|integer',
-        'estimasi_waktu' => 'required|integer',
-    ]);
-
-    Layanan::create([
-        'nama_pelanggan' => $request->nama_pelanggan,
-        'jenis_layanan' => $request->jenis_layanan,
-        'harga_per_kilo' => $request->harga_per_kilo,
-        'estimasi_waktu' => $request->estimasi_waktu,
-    ]);
-
-    return redirect()->route('user.layanan.index')->with('success', 'Data layanan berhasil ditambahkan.');
-}
-
-// Form edit layanan
-    public function edit($id)
     {
-        $layanan = Layanan::findOrFail($id);
-        $pelanggans = Pelanggan::all();
-        return view('user.layanan.edit', compact('layanan', 'pelanggans'));
+        $request->validate([
+            'layanan_id' => 'required|exists:layanans,id',
+        ]);
+
+        // Simpan ke transaksi user
+        auth()->user()->transaksis()->create([
+            'layanan_id' => $request->layanan_id,
+            'status'     => 'pending',
+            'total'      => Layanan::find($request->layanan_id)->harga,
+        ]);
+
+        return redirect()->route('user.transaksi.index')
+                         ->with('success', 'Pesanan berhasil dibuat!');
     }
-
-public function update(Request $request, Layanan $layanan)
-{
-    $request->validate([
-        'nama_pelanggan' => 'required|string',
-        'jenis_layanan' => 'required|string',
-        'harga_per_kilo' => 'required|integer',
-        'estimasi_waktu' => 'required|integer',
-    ]);
-
-    $layanan->update([
-        'nama_pelanggan' => $request->nama_pelanggan,
-        'jenis_layanan' => $request->jenis_layanan,
-        'harga_per_kilo' => $request->harga_per_kilo,
-        'estimasi_waktu' => $request->estimasi_waktu,
-    ]);
-
-    return redirect()->route('user.layanan.index')->with('success', 'Data layanan berhasil diperbarui.');
-}
-
-  // Hapus layanan
-    public function destroy($id)
-    {
-        $layanan = Layanan::findOrFail($id);
-        $layanan->delete();
-
-        return redirect()->route('user.layanan.index')->with('success', 'Layanan berhasil dihapus.');
-    }
-
 }
