@@ -12,6 +12,7 @@
 
     <!-- Custom styles for this template-->
     <link href="{{ asset('sbadmin2/css/sb-admin-2.min.css') }}" rel="stylesheet">
+    
 </head>
 
 <body id="page-top">
@@ -56,6 +57,9 @@
 
     <!-- Custom scripts for all pages-->
     <script src="{{ asset('sbadmin2/js/sb-admin-2.min.js') }}"></script>
+
+    <!-- Tambahkan SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     @stack('scripts')
 </body>

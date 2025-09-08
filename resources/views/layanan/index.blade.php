@@ -9,7 +9,7 @@
         <div class="alert alert-success">{{ session('success') }}</div>
     @endif
 
-    <a href="{{ route('layanan.create') }}" class="btn btn-primary mb-3">+ Tambah Layanan</a>
+    <a href="{{ route('admin.layanan.create') }}" class="btn btn-primary mb-3">+ Tambah Layanan</a>
 
     <div class="card shadow">
         <div class="card-body">

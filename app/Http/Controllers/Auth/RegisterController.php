@@ -10,37 +10,30 @@ use Illuminate\Support\Facades\Hash;
 
 class RegisterController extends Controller
 {
-    /**
-     * Tampilkan form registrasi
-     */
     public function showRegistrationForm()
     {
         return view('auth.register');
     }
 
-    /**
-     * Proses registrasi user baru
-     */
     public function register(Request $request)
     {
         $request->validate([
-            'username' => 'required|string|max:255|unique:users,username',
-            'email'    => 'required|string|email|max:255|unique:users,email',
+            'name'     => 'required|string|max:255',
+            'username' => 'required|string|max:255|unique:users',
+            'email'    => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:6|confirmed',
         ]);
 
-        // Simpan user baru dengan role default "user"
         $user = User::create([
+            'name'     => $request->name,
             'username' => $request->username,
             'email'    => $request->email,
+            'role'     => 'user', // default
             'password' => Hash::make($request->password),
-            'role'     => 'user', // default role pelanggan
         ]);
 
-        // Login otomatis setelah register
         Auth::login($user);
 
-        // Redirect sesuai role
-        return redirect()->intended('/user/dashboard');
+        return redirect()->route('user.dashboard')->with('success', 'Registrasi berhasil!');
     }
 }

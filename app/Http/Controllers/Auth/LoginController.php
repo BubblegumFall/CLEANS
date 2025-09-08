@@ -8,30 +8,21 @@ use Illuminate\Support\Facades\Auth;
 
 class LoginController extends Controller
 {
-    /**
-     * Tampilkan form login
-     */
     public function showLoginForm()
     {
         return view('auth.login');
     }
 
-    /**
-     * Proses login
-     */
     public function login(Request $request)
     {
-        $request->validate([
+        $credentials = $request->validate([
             'email'    => 'required|email',
-            'password' => 'required',
+            'password' => 'required|string',
         ]);
-
-        $credentials = $request->only('email', 'password');
 
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
 
-            // Redirect sesuai role
             return $this->redirectTo(Auth::user()->role);
         }
 
@@ -40,24 +31,19 @@ class LoginController extends Controller
         ])->onlyInput('email');
     }
 
-    /**
-     * Redirect user setelah login sesuai role
-     */
     protected function redirectTo($role)
     {
         switch ($role) {
             case 'admin':
-                return redirect()->intended('/admin/dashboard');
+                return redirect()->route('admin.dashboard')->with('success', 'Selamat datang Admin!');
             case 'user':
-                return redirect()->intended('/user/dashboard');
+                return redirect()->route('user.dashboard')->with('success', 'Selamat datang User!');
             default:
-                return redirect()->intended('/');
+                Auth::logout();
+                return redirect('/login')->with('error', 'Role tidak dikenali.');
         }
     }
 
-    /**
-     * Proses logout
-     */
     public function logout(Request $request)
     {
         Auth::logout();

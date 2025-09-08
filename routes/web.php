@@ -17,7 +17,7 @@ use App\Http\Controllers\User\UserTransaksiController;
 |--------------------------------------------------------------------------
 */
 Route::get('/', function () {
-    return view('auth.login');
+    return view('landing');
 });
 
 // Login
@@ -72,3 +72,27 @@ Route::middleware(['auth', 'role:user'])
         Route::resource('layanan', UserLayananController::class);
         Route::resource('transaksi', UserTransaksiController::class);
     });
+
+
+    Route::get('/pelanggan/create', [PelangganController::class, 'create'])
+    ->name('pelanggan.create')
+    ->middleware(['auth', 'role:admin']);
+
+    Route::middleware(['auth', 'role:admin'])->group(function () {
+    Route::resource('pelanggan', PelangganController::class);
+});
+
+
+Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->group(function () {
+    Route::resource('layanan', LayananController::class);
+});
+
+// Profile routes
+Route::middleware('auth')->group(function () {
+    Route::get('/profile', 'ProfileController@index')->name('profile');
+    Route::put('/profile', 'ProfileController@update')->name('profile.update');
+    Route::put('/profile/photo', 'ProfileController@updatePhoto')->name('profile.photo.update');
+    Route::put('/password', 'ProfileController@updatePassword')->name('password.update');
+});
+
+
