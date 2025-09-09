@@ -32,7 +32,7 @@
                     <input type="text" name="telepon" class="form-control" required>
                 </div>
                 <button type="submit" class="btn btn-primary">Simpan</button>
-                <a href="{{ route('pelanggan.index') }}" class="btn btn-secondary">Batal</a>
+                <a href="{{ route('admin.pelanggan.index') }}" class="btn btn-secondary">Batal</a>
             </form>
         </div>
     </div>

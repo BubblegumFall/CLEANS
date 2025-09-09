@@ -19,7 +19,7 @@
         }
         .left {
             width: 50%;
-            background: #0ea5e9;
+            background: linear-gradient(135deg, #0277bd 0%, #4fc3f7 100%);
             color: white;
             display: flex;
             justify-content: center;
@@ -35,7 +35,7 @@
             left: -50%;
             width: 200%;
             height: 200%;
-            background: radial-gradient(circle, rgba(255,255,255,0.1) 20%, transparent 20%);
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 20%, transparent 20%);
             background-size: 30px 30px;
             animation: movePattern 15s linear infinite;
             z-index: 1;
@@ -72,7 +72,8 @@
             z-index: 1;
         }
         @keyframes float {
-            0%, 100% {
+            0%,
+            100% {
                 transform: translateY(0) scale(1);
                 opacity: 0.7;
             }
@@ -123,6 +124,13 @@
         .input-group {
             position: relative;
             margin: 15px 0;
+            text-align: left;
+        }
+        .input-group label {
+            display: block;
+            margin-bottom: 5px;
+            color: #43475e;
+            font-weight: 600;
         }
         .login-box input {
             width: 100%;
@@ -132,6 +140,7 @@
             border: 1px solid #ddd;
             transition: all 0.3s ease;
             background: rgba(255, 255, 255, 0.9);
+            box-sizing: border-box;
         }
         .login-box input:focus {
             border-color: #43475e;
@@ -164,7 +173,7 @@
             left: -100%;
             width: 100%;
             height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
             transition: left 0.5s;
         }
         .login-box button:hover::before {
@@ -177,9 +186,23 @@
             animation: shake 0.5s;
         }
         @keyframes shake {
-            0%, 100% { transform: translateX(0); }
-            10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
-            20%, 40%, 60%, 80% { transform: translateX(5px); }
+            0%,
+            100% {
+                transform: translateX(0);
+            }
+            10%,
+            30%,
+            50%,
+            70%,
+            90% {
+                transform: translateX(-5px);
+            }
+            20%,
+            40%,
+            60%,
+            80% {
+                transform: translateX(5px);
+            }
         }
         @keyframes fadeIn {
             from {
@@ -217,12 +240,13 @@
         }
         .password-toggle {
             position: absolute;
-            right: 15px;
-            top: 50%;
+            right: 13px;
+            top: 55px;
             transform: translateY(-50%);
             cursor: pointer;
             color: #43475e;
             transition: color 0.3s;
+            z-index: 3;
         }
         .password-toggle:hover {
             color: #0ea5e9;
@@ -253,8 +277,12 @@
             z-index: 1;
         }
         @keyframes wave {
-            0% { background-position-x: 0; }
-            100% { background-position-x: 1440px; }
+            0% {
+                background-position-x: 0;
+            }
+            100% {
+                background-position-x: 1440px;
+            }
         }
     </style>
 </head>
@@ -284,13 +312,12 @@
             <form method="POST" action="{{ route('login') }}">
                 @csrf
                 <div class="input-group">
-                    <input type="email" name="email" placeholder="Email" value="{{ old('email') }}" required autofocus>
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="email" value="{{ old('email') }}" required autofocus>
                 </div>
                 <div class="input-group">
-                    <input type="text" name="username" placeholder="Username" value="{{ old('username') }}" required>
-                </div>
-                <div class="input-group">
-                    <input type="password" name="password" id="password" placeholder="Password" required>
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" required>
                     <i class="fa-solid fa-eye-slash password-toggle" id="togglePassword"></i>
                 </div>
                 <button type="submit">Login</button>
@@ -300,51 +327,50 @@
             </div>
         </div>
     </div>
-
     <script>
-        // Toggle password visibility
-        const togglePassword = document.getElementById('togglePassword');
-        const passwordInput = document.getElementById('password');
-
-        togglePassword.addEventListener('click', function() {
-            // Toggle the type attribute
-            const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
-            passwordInput.setAttribute('type', type);
+        document.addEventListener('DOMContentLoaded', function () {
+            // Toggle password visibility
+            const togglePassword = document.getElementById('togglePassword');
+            const passwordInput = document.getElementById('password');
             
-            // Toggle the icon
-            this.classList.toggle('fa-eye');
-            this.classList.toggle('fa-eye-slash');
-        });
-
-        // Add animation to form inputs
-        const inputs = document.querySelectorAll('input');
-        inputs.forEach(input => {
-            input.addEventListener('focus', function() {
-                this.parentElement.style.transform = 'scale(1.02)';
-                this.parentElement.style.transition = 'transform 0.3s ease';
+            if (togglePassword && passwordInput) {
+                togglePassword.addEventListener('click', function () {
+                    // Toggle the type attribute
+                    const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+                    passwordInput.setAttribute('type', type);
+                    
+                    // Toggle the icon
+                    this.classList.toggle('fa-eye');
+                    this.classList.toggle('fa-eye-slash');
+                });
+            }
+            
+            // Add animation to form inputs
+            const inputs = document.querySelectorAll('input');
+            inputs.forEach(input => {
+                input.addEventListener('focus', function () {
+                    this.parentElement.style.transform = 'scale(1.02)';
+                    this.parentElement.style.transition = 'transform 0.3s ease';
+                });
+                
+                input.addEventListener('blur', function () {
+                    this.parentElement.style.transform = 'scale(1)';
+                });
             });
             
-            input.addEventListener('blur', function() {
-                this.parentElement.style.transform = 'scale(1)';
-            });
+            // Periksa jika ada parameter success di URL
+            const urlParams = new URLSearchParams(window.location.search);
+            const success = urlParams.get('success');
+            
+            if (success === 'login') {
+                // Simpan flag di localStorage
+                localStorage.setItem('loginSuccess', 'true');
+                
+                // Hapus parameter dari URL
+                const newUrl = window.location.protocol + "//" + window.location.host + window.location.pathname;
+                window.history.replaceState({}, document.title, newUrl);
+            }
         });
     </script>
-    <!-- Tambahkan di bagian bawah halaman login, sebelum penutup body -->
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        // Periksa jika ada parameter success di URL
-        const urlParams = new URLSearchParams(window.location.search);
-        const success = urlParams.get('success');
-        
-        if (success === 'login') {
-            // Simpan flag di localStorage
-            localStorage.setItem('loginSuccess', 'true');
-            
-            // Hapus parameter dari URL
-            const newUrl = window.location.protocol + "//" + window.location.host + window.location.pathname;
-            window.history.replaceState({}, document.title, newUrl);
-        }
-    });
-</script>
 </body>
 </html>

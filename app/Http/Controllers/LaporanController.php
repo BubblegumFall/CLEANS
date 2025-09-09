@@ -11,6 +11,6 @@ class LaporanController extends Controller
     {
         // tampilkan semua transaksi sebagai laporan
         $transaksis = Transaksi::with(['pelanggan','layanan'])->latest()->paginate(20);
-        return view('laporan.index', compact('transaksis'));
+        return view('admin.laporan.index', compact('transaksis'));
     }
 }

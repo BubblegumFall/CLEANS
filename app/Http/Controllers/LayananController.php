@@ -2,76 +2,53 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Layanan;
-use App\Models\Pelanggan;
+use App\Models\Transaksi;
 use Illuminate\Http\Request;
 
 class LayananController extends Controller
 {
-    public function index()
-    {
-        $layanans = Layanan::paginate(10);
-        return view('layanan.index', compact('layanans'));
-    }
+    // ... kode lainnya ...
 
-    public function create()
-    {
-        $pelanggans = Pelanggan::all();
-        return view('layanan.create', compact('pelanggans'));
-    }
-
-    public function store(Request $request)
-{
-    $request->validate([
-        'nama_pelanggan' => 'required|string',
-        'jenis_layanan' => 'required|string',
-        'harga_per_kilo' => 'required|integer',
-        'estimasi_waktu' => 'required|integer',
-    ]);
-
-    Layanan::create([
-        'nama_pelanggan' => $request->nama_pelanggan,
-        'jenis_layanan' => $request->jenis_layanan,
-        'harga_per_kilo' => $request->harga_per_kilo,
-        'estimasi_waktu' => $request->estimasi_waktu,
-    ]);
-
-    return redirect()->route('layanan.index')->with('success', 'Data layanan berhasil ditambahkan.');
-}
-
-// Form edit layanan
-    public function edit($id)
+    /**
+     * Update the specified resource in storage.
+     */
+    public function update(Request $request, string $id)
     {
         $layanan = Layanan::findOrFail($id);
-        $pelanggans = Pelanggan::all();
-        return view('layanan.edit', compact('layanan', 'pelanggans'));
+        
+        $validatedData = $request->validate([
+            'nama_pelanggan' => 'required|string|max:255',
+            'jenis_layanan' => 'required|string|max:255',
+            'harga_per_kilo' => 'required|numeric|min:0',
+            'estimasi_waktu' => 'required|integer|min:1',
+            'deskripsi' => 'nullable|string|max:500',
+        ]);
+
+        $layanan->update($validatedData);
+
+        return redirect()->route('admin.layanan.index')->with('success', 'Layanan berhasil diperbarui!');
     }
 
-public function update(Request $request, Layanan $layanan)
-{
-    $request->validate([
-        'nama_pelanggan' => 'required|string',
-        'jenis_layanan' => 'required|string',
-        'harga_per_kilo' => 'required|integer',
-        'estimasi_waktu' => 'required|integer',
-    ]);
-
-    $layanan->update([
-        'nama_pelanggan' => $request->nama_pelanggan,
-        'jenis_layanan' => $request->jenis_layanan,
-        'harga_per_kilo' => $request->harga_per_kilo,
-        'estimasi_waktu' => $request->estimasi_waktu,
-    ]);
-
-    return redirect()->route('layanan.index')->with('success', 'Data layanan berhasil diperbarui.');
-}
-
-  // Hapus layanan
-    public function destroy($id)
+    /**
+     * Update payment status
+     */
+    public function updatePaymentStatus(Request $request, $id)
     {
-        $layanan = Layanan::findOrFail($id);
-        $layanan->delete();
-
-        return redirect()->route('layanan.index')->with('success', 'Layanan berhasil dihapus.');
+        $transaksi = Transaksi::findOrFail($id);
+        
+        $request->validate([
+            'status_pembayaran' => 'required|in:pending,dibayar,dibatalkan',
+        ]);
+        
+        $transaksi->status_pembayaran = $request->status_pembayaran;
+        
+        // If payment is marked as paid, update status to proses
+        if ($request->status_pembayaran == 'dibayar' && $transaksi->status == 'pending') {
+            $transaksi->status = 'proses';
+        }
+        
+        $transaksi->save();
+        
+        return redirect()->back()->with('success', 'Status pembayaran berhasil diperbarui!');
     }
 }

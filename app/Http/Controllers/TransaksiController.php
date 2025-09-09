@@ -12,15 +12,17 @@ class TransaksiController extends Controller
     public function index()
     {
         $transaksis = Transaksi::with(['pelanggan', 'layanan'])->get();
-        return view('transaksi.index', compact('transaksis'));
+        return view('admin.transaksi.index', compact('transaksis'));
     }
 
     public function create()
-    {
-        $pelanggans = Pelanggan::all();
-        $layanans = Layanan::all();
-        return view('transaksi.create', compact('pelanggans', 'layanans'));
-    }
+{
+    $pelanggans = Pelanggan::all();
+    $layanans   = Layanan::all();
+
+    return view('admin.transaksi.create', compact('pelanggans', 'layanans'));
+}
+
 
     public function store(Request $request)
     {
@@ -40,14 +42,16 @@ class TransaksiController extends Controller
             'total_harga' => $total_harga,
         ]);
 
-        return redirect()->route('transaksi.index')->with('success', 'Transaksi berhasil ditambahkan');
+        // ✅ route pakai prefix "admin"
+        return redirect()->route('admin.transaksi.index')
+                         ->with('success', 'Transaksi berhasil ditambahkan');
     }
 
     public function edit(Transaksi $transaksi)
     {
         $pelanggans = Pelanggan::all();
         $layanans = Layanan::all();
-        return view('transaksi.edit', compact('transaksi', 'pelanggans', 'layanans'));
+        return view('admin.transaksi.edit', compact('transaksi', 'pelanggans', 'layanans'));
     }
 
     public function update(Request $request, Transaksi $transaksi)
@@ -68,12 +72,17 @@ class TransaksiController extends Controller
             'total_harga' => $total_harga,
         ]);
 
-        return redirect()->route('transaksi.index')->with('success', 'Transaksi berhasil diupdate');
+        // ✅ route pakai prefix "admin"
+        return redirect()->route('admin.transaksi.index')
+                         ->with('success', 'Transaksi berhasil diupdate');
     }
 
     public function destroy(Transaksi $transaksi)
     {
         $transaksi->delete();
-        return redirect()->route('transaksi.index')->with('success', 'Transaksi berhasil dihapus');
+
+        // ✅ route pakai prefix "admin"
+        return redirect()->route('admin.transaksi.index')
+                         ->with('success', 'Transaksi berhasil dihapus');
     }
 }

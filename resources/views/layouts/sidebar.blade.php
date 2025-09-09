@@ -27,7 +27,7 @@
 
     <!-- Pelanggan -->
     <li class="nav-item {{ request()->is('admin/pelanggan*') ? 'active' : '' }}">
-        <a class="nav-link" href="{{ url('admin/pelanggan') }}">
+        <a class="nav-link" href="{{ route('admin.pelanggan.index') }}">
             <i class="fas fa-users"></i>
             <span>Pelanggan</span>
         </a>
@@ -35,7 +35,7 @@
 
     <!-- Layanan -->
     <li class="nav-item {{ request()->is('admin/layanan*') ? 'active' : '' }}">
-        <a class="nav-link" href="{{ url('admin/layanan') }}">
+        <a class="nav-link" href="{{ route('admin.layanan.index') }}">
             <i class="fas fa-concierge-bell"></i>
             <span>Layanan</span>
         </a>
@@ -43,7 +43,7 @@
 
     <!-- Transaksi -->
     <li class="nav-item {{ request()->is('admin/transaksi*') ? 'active' : '' }}">
-        <a class="nav-link" href="{{ url('admin/transaksi') }}">
+        <a class="nav-link" href="{{ route('admin.transaksi.index') }}">
             <i class="fas fa-exchange-alt"></i>
             <span>Transaksi</span>
         </a>
@@ -55,7 +55,7 @@
 
     <!-- Laporan -->
     <li class="nav-item {{ request()->is('admin/laporan*') ? 'active' : '' }}">
-        <a class="nav-link" href="{{ url('admin/laporan') }}">
+        <a class="nav-link" href="{{ route('admin.laporan.index') }}">
             <i class="fas fa-file-alt"></i>
             <span>Laporan</span>
         </a>

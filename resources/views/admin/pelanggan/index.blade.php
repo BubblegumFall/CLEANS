@@ -2,7 +2,7 @@
 @section('title','Data Pelanggan')
 @section('content')
 <h1 class="h3 mb-4 text-gray-800">Data Pelanggan</h1>
-<a href="{{ route('pelanggan.create') }}" class="btn btn-primary mb-3">+ Tambah Pelanggan</a>
+<a href="{{ route('admin.pelanggan.create') }}" class="btn btn-primary mb-3">+ Tambah Pelanggan</a>
 <div class="card shadow">
   <div class="card-body">
     <table class="table table-bordered">
@@ -23,9 +23,9 @@
                 <td>{{ $p->alamat }}</td>
                 <td>{{ $p->telepon }}</td>
                 <td>
-                    <a href="{{ route('pelanggan.edit', $p->id) }}" class="btn btn-warning btn-sm">Edit</a>
+                    <a href="{{ route('admin.pelanggan.edit', $p->id) }}" class="btn btn-warning btn-sm">Edit</a>
                     
-                    <form action="{{ route('pelanggan.destroy', $p->id) }}" method="POST" style="display:inline-block;">
+                    <form action="{{ route('admin.pelanggan.destroy', $p->id) }}" method="POST" style="display:inline-block;">
                         @csrf
                         @method('DELETE')
                         <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Yakin ingin hapus?')">Delete</button>

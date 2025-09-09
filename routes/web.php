@@ -10,26 +10,30 @@ use App\Http\Controllers\TransaksiController;
 use App\Http\Controllers\LaporanController;
 use App\Http\Controllers\User\UserLayananController;
 use App\Http\Controllers\User\UserTransaksiController;
+use App\Http\Controllers\UserProfileController;
 
 /*
 |--------------------------------------------------------------------------
-| Halaman Awal & Auth
+| Halaman Awal & Authentication Routes
 |--------------------------------------------------------------------------
 */
+// Halaman Landing
 Route::get('/', function () {
     return view('landing');
 });
 
-// Login
 Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [LoginController::class, 'login'])->name('login.post');
 
-// Logout
-Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+    // Register
+    Route::get('/register', [AuthController::class, 'showRegisterForm'])->name('register');
+    Route::post('/register', [AuthController::class, 'register'])->name('register.process');
 
-// Register
-Route::get('/register', [RegisterController::class, 'showRegistrationForm'])->name('register');
-Route::post('/register', [RegisterController::class, 'register']);
+
+
+
+// Logout
+Route::post('/logout', [AuthController::class, 'logout'])->name('logout')->middleware('auth');  
 
 /*
 |--------------------------------------------------------------------------
@@ -40,17 +44,19 @@ Route::middleware(['auth', 'role:admin'])
     ->prefix('admin')
     ->name('admin.')
     ->group(function () {
-
         // Dashboard Admin
         Route::get('/dashboard', function () {
             return view('admin.dashboard');
         })->name('dashboard');
+        
+        Route::resource('pelanggan', App\Http\Controllers\PelangganController::class);
+    Route::resource('layanan', App\Http\Controllers\LayananController::class);
+    Route::resource('transaksi', App\Http\Controllers\TransaksiController::class);
+    Route::resource('laporan', App\Http\Controllers\LaporanController::class);
 
-        // Resource Admin
-        Route::resource('pelanggan', PelangganController::class);
-        Route::resource('layanan', LayananController::class);
-        Route::resource('transaksi', TransaksiController::class);
-        Route::resource('laporan', LaporanController::class);
+    // Update payment status
+        Route::post('transaksi/{id}/payment-status', [LayananController::class, 'updatePaymentStatus'])
+            ->name('transaksi.updatePaymentStatus');
     });
 
 /*
@@ -62,37 +68,17 @@ Route::middleware(['auth', 'role:user'])
     ->prefix('user')
     ->name('user.')
     ->group(function () {
-
         // Dashboard User
         Route::get('/dashboard', function () {
             return view('user.dashboard');
         })->name('dashboard');
-
-        // Resource User
-        Route::resource('layanan', UserLayananController::class);
-        Route::resource('transaksi', UserTransaksiController::class);
+        
+        // Route profil
+        Route::get('/profile', [UserProfileController::class, 'index'])->name('profile');
+        Route::post('/profile/update', [UserProfileController::class, 'update'])->name('profile.update');
+        
+        // Resource Controllers
+        Route::resources([
+            'transaksi' => UserTransaksiController::class,
+        ]);
     });
-
-
-    Route::get('/pelanggan/create', [PelangganController::class, 'create'])
-    ->name('pelanggan.create')
-    ->middleware(['auth', 'role:admin']);
-
-    Route::middleware(['auth', 'role:admin'])->group(function () {
-    Route::resource('pelanggan', PelangganController::class);
-});
-
-
-Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->group(function () {
-    Route::resource('layanan', LayananController::class);
-});
-
-// Profile routes
-Route::middleware('auth')->group(function () {
-    Route::get('/profile', 'ProfileController@index')->name('profile');
-    Route::put('/profile', 'ProfileController@update')->name('profile.update');
-    Route::put('/profile/photo', 'ProfileController@updatePhoto')->name('profile.photo.update');
-    Route::put('/password', 'ProfileController@updatePassword')->name('password.update');
-});
-
-

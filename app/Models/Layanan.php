@@ -2,16 +2,18 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Layanan extends Model
 {
+    use HasFactory;
+    
     protected $fillable = [
-    'nama_pelanggan',
-    'jenis_layanan',
-    'harga_per_kilo',
-    'estimasi_waktu',
-];
-
+        'nama_pelanggan',
+        'jenis_layanan',
+        'harga_per_kilo',
+        'estimasi_waktu',
+        'deskripsi',
+    ];
 }
-
