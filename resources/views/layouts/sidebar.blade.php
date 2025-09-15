@@ -42,12 +42,12 @@
     </li>
 
     <!-- Transaksi -->
-    <li class="nav-item {{ request()->is('admin/transaksi*') ? 'active' : '' }}">
-        <a class="nav-link" href="{{ route('admin.transaksi.index') }}">
-            <i class="fas fa-exchange-alt"></i>
-            <span>Transaksi</span>
-        </a>
-    </li>
+<li class="nav-item">
+    <a class="nav-link" href="{{ route('admin.transaksi.index') }}">
+        <i class="fas fa-fw fa-money-bill-wave"></i>
+        <span>Kelola Transaksi</span>
+    </a>
+</li>
 
     <hr class="sidebar-divider">
 

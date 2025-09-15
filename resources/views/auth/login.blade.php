@@ -4,372 +4,390 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login - SICLEAN</title>
-    <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
     <style>
         body {
-            font-family: 'Poppins', sans-serif;
-            margin: 0;
-            padding: 0;
-            display: flex;
+            /* Mengubah background gradien dari biru muda ke ungu */
+            background: linear-gradient(135deg, #74b9ff, #a29bfe);
             height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             overflow: hidden;
         }
-        .left {
-            width: 50%;
-            background: linear-gradient(135deg, #0277bd 0%, #4fc3f7 100%);
+        
+        .login-container {
+            width: 100%;
+            max-width: 900px;
+            height: 500px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+            border-radius: 20px;
+            overflow: hidden;
+            background: white;
+            display: flex;
+        }
+        
+        .brand-section {
+            width: 40%;
+            background: linear-gradient(135deg, #3498db, #2980b9);
             color: white;
             display: flex;
-            justify-content: center;
-            align-items: center;
             flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
             position: relative;
             overflow: hidden;
         }
-        .left::before {
-            content: "";
+        
+        .brand-section::before {
+            content: '';
             position: absolute;
             top: -50%;
             left: -50%;
             width: 200%;
             height: 200%;
-            background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 20%, transparent 20%);
-            background-size: 30px 30px;
-            animation: movePattern 15s linear infinite;
-            z-index: 1;
+            background: radial-gradient(circle, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0) 70%);
+            animation: pulse 4s infinite alternate;
         }
-        @keyframes movePattern {
+        
+        @keyframes pulse {
             0% {
-                transform: translate(0, 0);
+                transform: scale(0.8);
+                opacity: 0.5;
             }
             100% {
-                transform: translate(30px, 30px);
+                transform: scale(1.2);
+                opacity: 0.8;
             }
         }
-        .left h1 {
-            font-size: 36px;
-            letter-spacing: 2px;
-            animation: slideIn 1s ease-out;
-            position: relative;
-            z-index: 2;
+        
+        .brand-icon {
+            font-size: 5rem;
+            margin-bottom: 1rem;
+            animation: float 3s ease-in-out infinite;
         }
-        .left .logo-naga-animated {
-            font-size: 180px;
-            margin-bottom: 20px;
-            color: rgba(255, 255, 255, 0.8);
-            opacity: 0;
-            animation: dropInLogo 1.2s ease-out forwards;
-            position: relative;
-            z-index: 2;
-        }
-        .left .bubble {
-            position: absolute;
-            background: rgba(255, 255, 255, 0.2);
-            border-radius: 50%;
-            animation: float 8s infinite ease-in-out;
-            z-index: 1;
-        }
+        
         @keyframes float {
-            0%,
-            100% {
-                transform: translateY(0) scale(1);
-                opacity: 0.7;
+            0% {
+                transform: translateY(0px);
             }
             50% {
-                transform: translateY(-20px) scale(1.1);
-                opacity: 0.9;
+                transform: translateY(-15px);
+            }
+            100% {
+                transform: translateY(0px);
             }
         }
-        .right {
-            width: 50%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            background: linear-gradient(135deg, #f8f9ff 0%, #e6e9ff 100%);
-            position: relative;
-            overflow: hidden;
+        
+        .brand-name {
+            font-size: 2.5rem;
+            font-weight: bold;
+            letter-spacing: 2px;
+            margin-bottom: 0.5rem;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.2);
         }
-        .right::before {
-            content: "";
-            position: absolute;
-            width: 200%;
-            height: 200%;
-            background-image: radial-gradient(circle, rgba(58, 90, 254, 0.05) 20%, transparent 20%);
-            background-size: 60px 60px;
-            animation: movePattern 20s linear infinite;
-        }
-        @keyframes movePattern {
-            from {
-                transform: translate(0, 0);
-            }
-            to {
-                transform: translate(-60px, -60px);
-            }
-        }
-        .login-box {
-            width: 80%;
-            max-width: 350px;
+        
+        .brand-tagline {
+            font-size: 1rem;
+            opacity: 0.9;
             text-align: center;
-            animation: fadeIn 1.2s ease-out;
+        }
+        
+        .login-section {
+            width: 60%;
+            padding: 2.5rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        
+        .login-title {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+        
+        .form-group {
+            margin-bottom: 1.5rem;
             position: relative;
-            z-index: 2;
         }
-        .login-box h2 {
-            color: #43475e;
-            margin-bottom: 20px;
-            animation: dropIn 1s ease-out;
-        }
-        .input-group {
-            position: relative;
-            margin: 15px 0;
-            text-align: left;
-        }
-        .input-group label {
-            display: block;
-            margin-bottom: 5px;
-            color: #43475e;
-            font-weight: 600;
-        }
-        .login-box input {
-            width: 100%;
-            padding: 12px 40px 12px 15px;
-            margin: 5px 0;
-            border-radius: 8px;
+        
+        .form-control {
+            border-radius: 50px;
+            padding: 12px 20px 12px 45px;
             border: 1px solid #ddd;
-            transition: all 0.3s ease;
-            background: rgba(255, 255, 255, 0.9);
-            box-sizing: border-box;
+            font-size: 1rem;
+            transition: all 0.3s;
         }
-        .login-box input:focus {
-            border-color: #43475e;
-            box-shadow: 0 0 8px #0ea5e9;
+        
+        .form-control:focus {
+            border-color: #3498db;
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
             outline: none;
-            transform: translateY(-2px);
         }
-        .login-box button {
-            width: 100%;
-            padding: 12px;
-            background: #0ea5e9;
-            border: none;
-            border-radius: 8px;
-            color: white;
-            font-size: 16px;
+        
+        .form-icon {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #999;
+            font-size: 1.2rem;
+        }
+        
+        /* Style untuk tombol mata */
+        .password-toggle {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #999;
             cursor: pointer;
-            transition: all 0.3s ease;
-            margin-top: 10px;
+            font-size: 1.2rem;
+        }
+        
+        .password-toggle:hover {
+            color: #3498db;
+        }
+        
+        .btn-login {
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            padding: 12px 0;
+            font-weight: 600;
+            font-size: 1rem;
+            width: 100%;
+            margin-top: 1rem;
+            transition: all 0.3s;
             position: relative;
             overflow: hidden;
         }
-        .login-box button:hover {
-            transform: scale(1.05);
-            box-shadow: 0 6px 15px #0ea5e9;
+        
+        .btn-login:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(52, 152, 219, 0.3);
         }
-        .login-box button::before {
-            content: "";
+        
+        .btn-login:active {
+            transform: translateY(1px);
+        }
+        
+        .btn-login::before {
+            content: '';
             position: absolute;
             top: 0;
             left: -100%;
             width: 100%;
             height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
             transition: left 0.5s;
         }
-        .login-box button:hover::before {
+        
+        .btn-login:hover::before {
             left: 100%;
         }
-        .error {
-            color: red;
-            font-size: 14px;
-            margin-bottom: 10px;
-            animation: shake 0.5s;
-        }
-        @keyframes shake {
-            0%,
-            100% {
-                transform: translateX(0);
-            }
-            10%,
-            30%,
-            50%,
-            70%,
-            90% {
-                transform: translateX(-5px);
-            }
-            20%,
-            40%,
-            60%,
-            80% {
-                transform: translateX(5px);
-            }
-        }
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-        @keyframes dropIn {
-            from {
-                opacity: 0;
-                transform: translateY(-30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-        @keyframes dropInLogo {
-            0% {
-                opacity: 0;
-                transform: translateY(-50px) scale(0.8);
-            }
-            60% {
-                opacity: 1;
-                transform: translateY(10px) scale(1.05);
-            }
-            100% {
-                opacity: 1;
-                transform: translateY(0) scale(1);
-            }
-        }
-        .password-toggle {
-            position: absolute;
-            right: 13px;
-            top: 55px;
-            transform: translateY(-50%);
-            cursor: pointer;
-            color: #43475e;
-            transition: color 0.3s;
-            z-index: 3;
-        }
-        .password-toggle:hover {
-            color: #0ea5e9;
-        }
+        
         .register-link {
-            margin-top: 15px;
-            font-size: 14px;
-            color: #43475e;
+            text-align: center;
+            margin-top: 1.5rem;
+            color: #666;
         }
+        
         .register-link a {
-            color: #0ea5e9;
-            text-decoration: none;
+            color: #3498db;
             font-weight: 600;
-            transition: all 0.3s;
+            text-decoration: none;
+            transition: color 0.3s;
         }
+        
         .register-link a:hover {
+            color: #2980b9;
             text-decoration: underline;
         }
-        .wave {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            height: 100px;
-            background: url('data:image/svg+xml;utf8,<svg viewBox="0 0 1440 320" xmlns="http://www.w3.org/2000/svg"><path fill="%23ffffff" fill-opacity="0.3" d="M0,192L48,197.3C96,203,192,213,288,229.3C384,245,480,267,576,250.7C672,235,768,181,864,181.3C960,181,1056,235,1152,234.7C1248,235,1344,181,1392,154.7L1440,128L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path></svg>');
-            background-size: cover;
-            animation: wave 10s linear infinite;
-            z-index: 1;
+        
+        .alert {
+            border-radius: 10px;
+            margin-bottom: 1.5rem;
         }
-        @keyframes wave {
-            0% {
-                background-position-x: 0;
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .login-container {
+                flex-direction: column;
+                height: auto;
+                max-width: 400px;
             }
-            100% {
-                background-position-x: 1440px;
+            
+            .brand-section {
+                width: 100%;
+                height: 150px;
+                padding: 1rem;
             }
+            
+            .brand-icon {
+                font-size: 3rem;
+            }
+            
+            .brand-name {
+                font-size: 1.8rem;
+            }
+            
+            .login-section {
+                width: 100%;
+                padding: 1.5rem;
+            }
+        }
+        
+        /* Loading animation */
+        .loading {
+            display: none;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+        
+        .loading span {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: #3498db;
+            margin: 0 5px;
+            animation: loading 1.4s infinite ease-in-out both;
+        }
+        
+        .loading span:nth-child(1) {
+            animation-delay: -0.32s;
+        }
+        
+        .loading span:nth-child(2) {
+            animation-delay: -0.16s;
+        }
+        
+        @keyframes loading {
+            0%, 80%, 100% {
+                transform: scale(0);
+                opacity: 0.5;
+            }
+            40% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+        
+        .form-container {
+            position: relative;
+        }
+        
+        .form-container.loading .form-control,
+        .form-container.loading .btn-login {
+            opacity: 0.7;
+            pointer-events: none;
+        }
+        
+        .form-container.loading .loading {
+            display: block;
         }
     </style>
 </head>
 <body>
-    <div class="left">
-        <div class="bubble" style="width: 80px; height: 80px; top: 20%; left: 10%; animation-delay: 0s;"></div>
-        <div class="bubble" style="width: 120px; height: 120px; top: 60%; left: 80%; animation-delay: 2s;"></div>
-        <div class="bubble" style="width: 60px; height: 60px; top: 40%; left: 70%; animation-delay: 4s;"></div>
-        <div class="bubble" style="width: 100px; height: 100px; top: 70%; left: 20%; animation-delay: 1s;"></div>
-        <i class="fa-solid fa-jug-detergent logo-naga-animated"></i>
-        <h1>SICLEAN</h1>
-        <div class="wave"></div>
-    </div>
-    <div class="right">
-        <div class="login-box">
-            <h2>WELCOME</h2>
-            {{-- Error message --}}
-            @if($errors->any())
-                <div class="error">{{ $errors->first() }}</div>
-            @endif
-            {{-- Success message --}}
-            @if(session('success'))
-                <div style="color: green; font-size:14px; margin-bottom:10px;">
-                    {{ session('success') }}
+    <div class="login-container animate__animated animate__fadeInUp">
+        <!-- Brand Section -->
+        <div class="brand-section">
+            <i class="fas fa-soap brand-icon"></i>
+            <h1 class="brand-name">SICLEAN</h1>
+            <p class="brand-tagline">Layanan Laundry Terpercaya</p>
+        </div>
+        
+        <!-- Login Section -->
+        <div class="login-section">
+            <h2 class="login-title">WELCOME</h2>
+            
+            @if(session('error'))
+                <div class="alert alert-danger animate__animated animate__shakeX">
+                    <i class="fas fa-exclamation-circle me-2"></i>{{ session('error') }}
                 </div>
             @endif
-            <form method="POST" action="{{ route('login') }}">
+            
+            <form method="POST" action="{{ route('login') }}" class="form-container" id="loginForm">
                 @csrf
-                <div class="input-group">
-                    <label for="email">Email</label>
-                    <input type="email" id="email" name="email" value="{{ old('email') }}" required autofocus>
+                <div class="form-group">
+                    <i class="fas fa-envelope form-icon"></i>
+                    <input type="email" class="form-control @error('email') is-invalid @enderror" 
+                           id="email" name="email" placeholder="Email" required autofocus>
+                    @error('email')
+                        <div class="invalid-feedback">{{ $message }}</div>
+                    @enderror
                 </div>
-                <div class="input-group">
-                    <label for="password">Password</label>
-                    <input type="password" id="password" name="password" required>
-                    <i class="fa-solid fa-eye-slash password-toggle" id="togglePassword"></i>
+                
+                <div class="form-group">
+                    <i class="fas fa-lock form-icon"></i>
+                    <input type="password" class="form-control @error('password') is-invalid @enderror" 
+                           id="password" name="password" placeholder="Password" required>
+                    <i class="fas fa-eye-slash password-toggle" id="togglePassword"></i>
+                    @error('password')
+                        <div class="invalid-feedback">{{ $message }}</div>
+                    @enderror
                 </div>
-                <button type="submit">Login</button>
+                
+                <div class="form-group form-check">
+                    <input type="checkbox" class="form-check-input" id="remember" name="remember">
+                    <label class="form-check-label" for="remember">Remember me</label>
+                </div>
+                
+                <button type="submit" class="btn btn-login">
+                    <span class="btn-text">Login</span>
+                </button>
+                
+                <div class="loading">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
             </form>
-            <div class="register-link">
+            
+            <div class="register-link animate__animated animate__fadeIn">
                 Belum mempunyai akun? <a href="{{ route('register') }}">Daftar</a>
             </div>
         </div>
     </div>
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        document.addEventListener('DOMContentLoaded', function () {
+        document.addEventListener('DOMContentLoaded', function() {
+            const loginForm = document.getElementById('loginForm');
+            
+            loginForm.addEventListener('submit', function() {
+                // Show loading animation
+                this.classList.add('loading');
+                
+                // Prevent multiple submissions
+                const submitButton = this.querySelector('button[type="submit"]');
+                submitButton.disabled = true;
+            });
+            
             // Toggle password visibility
             const togglePassword = document.getElementById('togglePassword');
             const passwordInput = document.getElementById('password');
             
-            if (togglePassword && passwordInput) {
-                togglePassword.addEventListener('click', function () {
-                    // Toggle the type attribute
-                    const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
-                    passwordInput.setAttribute('type', type);
-                    
-                    // Toggle the icon
-                    this.classList.toggle('fa-eye');
-                    this.classList.toggle('fa-eye-slash');
-                });
-            }
-            
-            // Add animation to form inputs
-            const inputs = document.querySelectorAll('input');
-            inputs.forEach(input => {
-                input.addEventListener('focus', function () {
-                    this.parentElement.style.transform = 'scale(1.02)';
-                    this.parentElement.style.transition = 'transform 0.3s ease';
-                });
+            togglePassword.addEventListener('click', function() {
+                // Toggle the type attribute
+                const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+                passwordInput.setAttribute('type', type);
                 
-                input.addEventListener('blur', function () {
-                    this.parentElement.style.transform = 'scale(1)';
-                });
+                // Toggle the eye icon
+                this.classList.toggle('fa-eye');
+                this.classList.toggle('fa-eye-slash');
             });
-            
-            // Periksa jika ada parameter success di URL
-            const urlParams = new URLSearchParams(window.location.search);
-            const success = urlParams.get('success');
-            
-            if (success === 'login') {
-                // Simpan flag di localStorage
-                localStorage.setItem('loginSuccess', 'true');
-                
-                // Hapus parameter dari URL
-                const newUrl = window.location.protocol + "//" + window.location.host + window.location.pathname;
-                window.history.replaceState({}, document.title, newUrl);
-            }
         });
     </script>
 </body>

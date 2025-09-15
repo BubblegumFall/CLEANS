@@ -100,7 +100,7 @@
             <li class="nav-item {{ request()->is('user/transaksi*') ? 'active' : '' }}">
                 <a class="nav-link" href="{{ url('user/transaksi') }}">
                     <i class="fas fa-exchange-alt"></i>
-                    <span>Riwayat Transaksi</span>
+                    <span>Transaksi</span>
                 </a>
             </li>
             <hr class="sidebar-divider d-none d-md-block">
@@ -139,14 +139,16 @@
                                 <i class="fas fa-dragon logo-naga-animated"></i>
                             </a>
                             <!-- Dropdown - User Information -->
-                            <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
-                                aria-labelledby="userDropdown">
-                                <!-- Profil -->
-                                <a class="dropdown-item" href="{{ route('user.profile') }}">
-                                    <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
-                                    Profil
+                            <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
+                                <a class="dropdown-item nav-link {{ request()->is('user/profile') ? 'active' : '' }}" href="{{  url('/user/profile') }}">
+                                    <i class="fas fa-user mr-2"></i>
+                                    Profil Saya
                                 </a>
                                 <div class="dropdown-divider"></div>
+                                <a href="{{ ('/login') }}" class="dropdown-item text-danger" id="logoutButton">
+                                    <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
+                                    Logout
+                                </a>
                             </div>
                         </li>
                     </ul>

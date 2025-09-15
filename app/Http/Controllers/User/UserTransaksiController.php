@@ -4,97 +4,88 @@ namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
 use App\Models\Transaksi;
+use App\Models\Layanan;
 use Illuminate\Http\Request;
-use Illuminate\Support\Str;
 
 class UserTransaksiController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        $transaksis = Transaksi::where('user_id', auth()->id())->latest()->paginate(10);
+        $transaksis = Transaksi::with(['layanan'])
+            ->where('user_id', auth()->id())
+            ->latest()
+            ->paginate(10);
+
         return view('user.transaksi.index', compact('transaksis'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
-        $layanans = \App\Models\Layanan::all();
+        $layanans = Layanan::all();
         return view('user.transaksi.create', compact('layanans'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
         $request->validate([
             'layanan_id' => 'required|exists:layanans,id',
             'berat' => 'required|numeric|min:0.1',
+            'metode_pembayaran' => 'required|in:cash,e-wallet',
         ]);
 
-        $layanan = \App\Models\Layanan::findOrFail($request->layanan_id);
-        
-        // Generate kode transaksi
-        $kodeTransaksi = 'TRX-' . date('Ymd') . '-' . Str::random(4);
-        
-        // Hitung total
-        $total = $layanan->harga_per_kilo * $request->berat;
-        
-        // Hitung diskon (misal: 10% jika total > 100000)
+        $layanan = Layanan::findOrFail($request->layanan_id);
+        $berat = $request->berat;
+        $subtotal = $layanan->harga * $berat;
+
+        // Hitung diskon jika berat > 4kg
         $diskon = 0;
-        if ($total > 100000) {
-            $diskon = $total * 0.1;
+        if ($berat > 4) {
+            $diskon = $subtotal * 0.1;
         }
-        
-        // Hitung total akhir
-        $totalAkhir = $total - $diskon;
-        
-        // Create transaksi
-        $transaksi = Transaksi::create([
+
+        $totalAkhir = $subtotal - $diskon;
+
+        // Generate kode transaksi unik
+        $kodeTransaksi = 'TRX-' . date('Ymd') . '-' . rand(1000, 9999);
+
+        Transaksi::create([
             'user_id' => auth()->id(),
             'layanan_id' => $request->layanan_id,
             'kode_transaksi' => $kodeTransaksi,
-            'tanggal_transaksi' => date('Y-m-d'),
-            'berat' => $request->berat,
-            'total' => $total,
+            'berat' => $berat,
+            'total_harga' => $subtotal,
             'diskon' => $diskon,
             'total_akhir' => $totalAkhir,
-            'status' => 'pending',
-            'status_pembayaran' => 'pending',
+            'metode_pembayaran' => $request->metode_pembayaran,
+            'status_pembayaran' => 'pending', // Default status pembayaran
+            'status_transaksi' => 'pending', // Default status transaksi
+            'tanggal_transaksi' => now(),
         ]);
-        
-        return redirect()->route('user.transaksi.show', $transaksi->id)
-            ->with('success', 'Transaksi berhasil dibuat! Silakan lakukan pembayaran.');
+
+        return redirect()->route('user.transaksi.index')->with('success', 'Transaksi berhasil dibuat');
     }
 
-    /**
-     * Display the specified resource.
-     */
     public function show($id)
     {
-        $transaksi = Transaksi::where('user_id', auth()->id())->findOrFail($id);
+        // Gunakan fresh() untuk mendapatkan data terbaru dari database
+        $transaksi = Transaksi::with(['layanan'])
+            ->where('user_id', auth()->id())
+            ->findOrFail($id)
+            ->fresh();
+
         return view('user.transaksi.show', compact('transaksi'));
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy($id)
+    public function pickup($id)
     {
         $transaksi = Transaksi::where('user_id', auth()->id())->findOrFail($id);
-        
-        // Hanya bisa menghapus transaksi dengan status pending
-        if ($transaksi->status != 'pending' || $transaksi->status_pembayaran != 'pending') {
-            return redirect()->back()->with('error', 'Hanya transaksi dengan status pending yang dapat dibatalkan');
+
+        if ($transaksi->status_transaksi != 'selesai') {
+            return redirect()->back()->with('error', 'Transaksi belum selesai');
         }
-        
-        $transaksi->delete();
-        
-        return redirect()->route('user.transaksi.index')->with('success', 'Transaksi berhasil dibatalkan');
+
+        $transaksi->update(['status_transaksi' => 'diambil']);
+
+        return redirect()->route('user.transaksi.index')->with('success', 'Terima kasih, laundry Anda telah diambil');
     }
 }

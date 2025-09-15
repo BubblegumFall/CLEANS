@@ -8,12 +8,16 @@ use Illuminate\Database\Eloquent\Model;
 class Layanan extends Model
 {
     use HasFactory;
-    
+
     protected $fillable = [
-        'nama_pelanggan',
         'jenis_layanan',
-        'harga_per_kilo',
+        'harga',
         'estimasi_waktu',
         'deskripsi',
     ];
+
+    public function transaksis()
+    {
+        return $this->hasMany(Transaksi::class);
+    }
 }

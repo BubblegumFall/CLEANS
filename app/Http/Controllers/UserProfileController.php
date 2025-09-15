@@ -1,39 +1,46 @@
 <?php
 
-namespace App\Http\Controllers\User;
+namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
-use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
+use App\Models\User;
 
 class UserProfileController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        return view('user.profile', [
-            'user' => auth()->user()
-        ]);
+        return view('user.profile');
     }
-
-    /**
-     * Update the specified resource in storage.
-     */
+    
     public function update(Request $request)
     {
-        $user = auth()->user();
-        
-        $validatedData = $request->validate([
+        $request->validate([
             'name' => 'required|string|max:255',
-            'username' => 'required|string|max:255|unique:users,username,' . $user->id,
-            'email' => 'required|string|email|max:255|unique:users,email,' . $user->id,
+            'email' => 'required|string|email|max:255|unique:users,email,' . auth()->id(),
             'phone' => 'nullable|string|max:20',
-            'address' => 'nullable|string|max:500',
+            'address' => 'nullable|string|max:255',
+            'current_password' => 'nullable|required_with:password|string',
+            'password' => 'nullable|string|min:8|confirmed',
         ]);
         
-        $user->update($validatedData);
+        $user = User::find(auth()->id());
+        
+        // Update data profil
+        $user->name = $request->name;
+        $user->email = $request->email;
+        $user->phone = $request->phone;
+        $user->address = $request->address;
+        
+        // Update password jika diisi
+        if ($request->filled('password')) {
+            if (!Hash::check($request->current_password, $user->password)) {
+                return back()->withErrors(['current_password' => 'Password saat ini tidak sesuai']);
+            }
+            $user->password = Hash::make($request->password);
+        }
+        
+        $user->save();
         
         return redirect()->route('user.profile')->with('success', 'Profil berhasil diperbarui!');
     }
