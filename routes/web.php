@@ -49,6 +49,7 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'role:admin'])->grou
     Route::get('/dashboard', function () {
         return view('admin.dashboard');
     })->name('dashboard');
+    
     // Layanan Routes
     Route::resource('/layanan', App\Http\Controllers\Admin\LayananController::class);
 

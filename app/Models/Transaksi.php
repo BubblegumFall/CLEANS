@@ -13,7 +13,7 @@ class Transaksi extends Model
     'tanggal_selesai'
 ];
     
-    protected $dates = ['tanggal_transaksi', 'tanggal_selesai'];
+    protected $casts = ['tanggal_transaksi' => 'datetime'];
     
     public function user()
     {

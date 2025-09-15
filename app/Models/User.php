@@ -11,13 +11,11 @@ class User extends Authenticatable
     use HasFactory, Notifiable;
 
     protected $fillable = [
-    'username',
+    'name',
     'email',
     'password',
     'role',
 ];
-
-
 
     protected $hidden = [
         'password',
@@ -29,4 +27,10 @@ class User extends Authenticatable
     {
         return $this->hasMany(Transaksi::class, 'user_id');
     }
+
+    public function pelanggan()
+{
+    return $this->hasOne(Pelanggan::class);
+}
+
 }

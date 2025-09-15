@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Pelanggan;
 use Illuminate\Http\Request;
+use App\Models\User;
 
 class PelangganController extends Controller
 {
@@ -12,8 +13,8 @@ class PelangganController extends Controller
      */
     public function index()
     {
-        $pelanggans = Pelanggan::latest()->paginate(10);
-        return view('admin.pelanggan.index', compact('pelanggans')); // ✅ arahkan ke folder admin
+        $pelanggans = User::where('role', 'pelanggan')->paginate(10);
+        return view('admin.pelanggan.index', compact('pelanggans'));
     }
 
     public function create()
@@ -32,7 +33,7 @@ class PelangganController extends Controller
         Pelanggan::create($request->all());
 
         return redirect()->route('admin.pelanggan.index') // ✅ route pakai prefix admin
-                         ->with('success', 'Pelanggan berhasil ditambahkan');
+            ->with('success', 'Pelanggan berhasil ditambahkan');
     }
 
     public function edit(Pelanggan $pelanggan)
@@ -51,13 +52,13 @@ class PelangganController extends Controller
         $pelanggan->update($request->all());
 
         return redirect()->route('admin.pelanggan.index') // ✅ route pakai prefix admin
-                         ->with('success', 'Pelanggan berhasil diperbarui');
+            ->with('success', 'Pelanggan berhasil diperbarui');
     }
 
     public function destroy(Pelanggan $pelanggan)
     {
         $pelanggan->delete();
         return redirect()->route('admin.pelanggan.index') // ✅ route pakai prefix admin
-                         ->with('success', 'Pelanggan berhasil dihapus');
+            ->with('success', 'Pelanggan berhasil dihapus');
     }
 }

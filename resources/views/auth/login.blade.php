@@ -9,21 +9,20 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
     <style>
         body {
-            /* Mengubah background gradien dari biru muda ke ungu */
-            background: linear-gradient(135deg, #74b9ff, #a29bfe);
+            /* Mengubah background menjadi abu-abu muda polos */
+            background-color: #f1f5f9;
             height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            overflow: hidden;
         }
         
         .login-container {
             width: 100%;
             max-width: 900px;
             height: 500px;
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
             border-radius: 20px;
             overflow: hidden;
             background: white;
@@ -40,47 +39,11 @@
             justify-content: center;
             padding: 2rem;
             position: relative;
-            overflow: hidden;
-        }
-        
-        .brand-section::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0) 70%);
-            animation: pulse 4s infinite alternate;
-        }
-        
-        @keyframes pulse {
-            0% {
-                transform: scale(0.8);
-                opacity: 0.5;
-            }
-            100% {
-                transform: scale(1.2);
-                opacity: 0.8;
-            }
         }
         
         .brand-icon {
             font-size: 5rem;
             margin-bottom: 1rem;
-            animation: float 3s ease-in-out infinite;
-        }
-        
-        @keyframes float {
-            0% {
-                transform: translateY(0px);
-            }
-            50% {
-                transform: translateY(-15px);
-            }
-            100% {
-                transform: translateY(0px);
-            }
         }
         
         .brand-name {
@@ -300,7 +263,7 @@
     </style>
 </head>
 <body>
-    <div class="login-container animate__animated animate__fadeInUp">
+    <div class="login-container">
         <!-- Brand Section -->
         <div class="brand-section">
             <i class="fas fa-soap brand-icon"></i>
@@ -313,7 +276,7 @@
             <h2 class="login-title">WELCOME</h2>
             
             @if(session('error'))
-                <div class="alert alert-danger animate__animated animate__shakeX">
+                <div class="alert alert-danger">
                     <i class="fas fa-exclamation-circle me-2"></i>{{ session('error') }}
                 </div>
             @endif
@@ -355,7 +318,7 @@
                 </div>
             </form>
             
-            <div class="register-link animate__animated animate__fadeIn">
+            <div class="register-link">
                 Belum mempunyai akun? <a href="{{ route('register') }}">Daftar</a>
             </div>
         </div>
